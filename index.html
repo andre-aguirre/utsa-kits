@@ -394,6 +394,9 @@ $("#more").addEventListener("click",()=>{expanded=true;renderDir();});
 renderDir();
 
 const pend='<span class="pending">Not surveyed yet</span>';
+// UTSA room numbers start with the floor: 1.01.20 = 1st floor, 0.E2 = floor 0
+const FLOORS=["Floor 0 (lower level)","First floor","Second floor","Third floor","Fourth floor","Fifth floor","Sixth floor","Seventh floor","Eighth floor","Ninth floor"];
+function floorOf(room){const m=/^(\d)\.\S/.exec(room);return m?FLOORS[+m[1]]:null;}
 let lastFocus=null;
 function detail(k){
   const st=status(k.code);
@@ -415,7 +418,7 @@ function detail(k){
       <dl class="facts">
         <dt>Building</dt><dd>${esc(k.code)}${k.name?` · ${esc(k.name)}`:""}</dd>
         <dt>Location</dt><dd>${roomTxt}</dd>
-        <dt>Floor</dt><dd>${pend}</dd>
+        <dt>Floor</dt><dd>${floorOf(k.room)||pend}</dd>
         <dt>Entrance</dt><dd>${pend}</dd>
         <dt>Directions</dt><dd>${pend}</dd>
         <dt>Hours</dt><dd>${h&&st.s!=="unk"?`${esc(st.t)} <a href="${h.src}" target="_blank" rel="noopener">See full hours</a>`:'<span class="pending">Not confirmed</span>'}</dd>
