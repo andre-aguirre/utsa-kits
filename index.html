@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>UTSA Bleeding Control Kits</title>
+<style>
+html{color-scheme:light}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+/* Layout: UTSA department-site shell (navy global bar, white title band, nav row).
+   Phone: single column. Desktop: sticky "find" panel left, results + directory right. */
+:root{
+  --blue:#0C2340; --orange:#F15A22; --orange-dark:#C4430F;
+  --bg:#F3F4F6; --surface:#FFFFFF; --fg:#0C2340; --text:#1F2A3A; --muted:#556275; --line:#D5DAE1;
+  --chip:#ECEFF3; --warn-bg:#FFF3E8; --warn-fg:#7A3500; --stripe:#E1E5EB; --band:#FFFFFF;
+  --head:"Helvetica Neue","HelveticaNeue",Helvetica,Arial,sans-serif;
+  --body:"Helvetica Neue","HelveticaNeue",Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#071425; --surface:#0E2038; --fg:#F1F4F8; --text:#DCE3EC; --muted:#9FADC0; --line:#24395A;
+  --chip:#18304F; --warn-bg:#3A2210; --warn-fg:#FFD2AE; --stripe:#162C4A; --band:#0B1B30; --orange-dark:#FF8150; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#071425; --surface:#0E2038; --fg:#F1F4F8; --text:#DCE3EC; --muted:#9FADC0; --line:#24395A;
+  --chip:#18304F; --warn-bg:#3A2210; --warn-fg:#FFD2AE; --stripe:#162C4A; --band:#0B1B30; --orange-dark:#FF8150; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--blue)}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+
+/* Global bar */
+.global{background:var(--blue);color:#fff}
+.global .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:8px}
+.wordmark{font-family:var(--head);font-weight:800;font-size:1.05rem;letter-spacing:.01em;text-decoration:none;color:#fff;white-space:nowrap}
+.wordmark span{color:var(--orange)}
+.glinks{display:flex;gap:4px 20px;font-size:.85rem;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.glinks a{color:#fff;opacity:.9;text-decoration:none}.glinks a:hover{opacity:1;text-decoration:underline}
+.phones{display:flex;gap:4px 18px;font-size:.82rem;flex-wrap:wrap}
+.phones b{color:#FFB08F;font-weight:700}
+
+/* Sticky site header */
+.site{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--band);border-bottom:4px solid var(--orange);box-shadow:0 2px 8px rgba(12,35,64,.08)}
+.site .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px}
+.dept{display:grid;gap:0}
+.dept small{font-family:var(--head);font-weight:700;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.dept h1{margin:0;font-family:var(--head);font-weight:800;font-stretch:condensed;font-size:1.4rem;line-height:1.1;color:var(--fg);text-wrap:balance}
+.call{flex:none;display:inline-flex;align-items:center;gap:8px;background:#C8102E;color:#fff;text-decoration:none;font-family:var(--head);font-weight:800;font-size:1.05rem;letter-spacing:.06em;text-transform:uppercase;padding:12px 18px;border-radius:0;min-height:48px}
+.call:hover{background:#A50D26}
+.nav{border-top:1px solid var(--line)}
+.site .nav .wrap{justify-content:flex-start;display:flex;gap:0 4px;overflow-x:auto;white-space:nowrap;padding-block:0;scrollbar-width:none}
+.nav a{display:block;padding:10px 12px;font-weight:700;font-size:.88rem;text-decoration:none;color:var(--fg);border-bottom:3px solid transparent;margin-bottom:-1px}
+.nav a:first-child{padding-left:0}
+.nav a:hover{border-bottom-color:var(--orange)}
+
+.proto{background:var(--warn-bg);color:var(--warn-fg);font-size:.86rem}
+.proto .wrap{padding-block:8px}
+
+/* Main layout */
+.layout{display:grid;gap:8px;padding-block:20px 8px}
+.panel{display:grid;gap:14px;align-content:start}
+.content{min-width:0}
+
+.btn{appearance:none;border:0;cursor:pointer;width:100%;min-height:64px;background:var(--orange);color:#fff;font-family:var(--head);font-weight:800;font-size:1.35rem;letter-spacing:.06em;text-transform:uppercase;padding:16px 20px;border-radius:0;display:flex;align-items:center;justify-content:center;gap:12px;transition:background .15s}
+.btn:hover{background:var(--orange-dark)}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.1em}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.lbl{font-weight:700;font-size:.85rem;display:block;margin-bottom:6px;color:var(--fg);text-transform:uppercase;letter-spacing:.06em}
+select,input[type=search]{width:100%;font:inherit;font-size:1rem;padding:12px 14px;min-height:48px;border:2px solid var(--line);border-radius:0;background:var(--surface);color:var(--text)}
+select:focus,input[type=search]:focus{border-color:var(--blue)}
+.status{font-size:.9rem;color:var(--muted);min-height:1.3em;margin:0}
+
+.steps{background:var(--blue);color:#fff;padding:16px 18px;display:grid;gap:8px}
+.steps h3{margin:0;font-family:var(--head);font-weight:800;font-stretch:condensed;font-size:1.1rem;letter-spacing:.06em;text-transform:uppercase;color:#FFB08F}
+.steps ol{margin:0;padding-left:1.2em;display:grid;gap:4px}
+.panelinfo{display:none}
+
+h2{font-family:var(--head);font-weight:800;font-stretch:condensed;font-size:1.5rem;color:var(--fg);margin:24px 0 12px;display:flex;align-items:center;gap:10px;text-wrap:balance}
+h2::before{content:"";width:6px;height:1.1em;background:var(--orange);flex:none}
+.results{display:grid;gap:12px;margin-bottom:12px}
+
+/* Kit card */
+.kit{background:var(--surface);border:1px solid var(--line);overflow:hidden;display:grid;grid-template-columns:116px 1fr;scroll-margin-top:140px}
+.kit.hl{outline:3px solid var(--orange);outline-offset:-3px}
+.photo{background:repeating-linear-gradient(135deg,var(--stripe) 0 8px,transparent 8px 16px),var(--chip);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:8px;min-height:116px}
+.info{padding:12px 14px;display:grid;gap:6px;min-width:0;align-content:start}
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.bldg{font-family:var(--head);font-weight:800;font-stretch:condensed;font-size:1.4rem;line-height:1.05;color:var(--fg)}
+.dist{font-family:var(--head);font-weight:800;font-size:1rem;color:var(--fg);white-space:nowrap;font-variant-numeric:tabular-nums;border-bottom:3px solid var(--orange)}
+.full{color:var(--muted);font-size:.88rem;margin-top:-4px}
+.room b{font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip,.badge{padding:2px 8px;font-size:.76rem;font-weight:700;letter-spacing:.03em}
+.chip{background:var(--chip);color:var(--text)}
+.chip.flag{background:var(--warn-bg);color:var(--warn-fg)}
+.badge.open{background:#DCF2E3;color:#0E5A2B}.badge.closed{background:#FBDFDC;color:#951B12}.badge.unk{background:var(--chip);color:var(--muted)}
+.go{justify-self:start;display:inline-flex;align-items:center;gap:6px;color:var(--fg);font-weight:800;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border:2px solid var(--fg);padding:8px 14px;min-height:40px;margin-top:2px}
+.go:hover{background:var(--fg);color:var(--surface)}
+.skipped{font-size:.88rem;color:var(--muted);margin:0}
+
+.tabs{display:flex;gap:0;overflow-x:auto;margin-bottom:14px;border-bottom:2px solid var(--line);scrollbar-width:none}
+.tab{flex:none;appearance:none;border:0;background:none;color:var(--muted);font:inherit;font-weight:700;font-size:.92rem;padding:10px 14px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px}
+.tab[aria-pressed="true"]{color:var(--fg);border-bottom-color:var(--orange)}
+.tab .n{font-weight:400;color:var(--muted);margin-left:4px;font-variant-numeric:tabular-nums}
+.dirhead{display:grid;gap:4px;margin-bottom:12px}
+.dir{display:grid;gap:10px}
+
+.more{appearance:none;cursor:pointer;width:100%;margin-top:14px;min-height:52px;background:#fff;color:#0C2340;border:2px solid #0C2340;font-family:var(--head);font-weight:800;font-size:1rem;letter-spacing:.06em;text-transform:uppercase;border-radius:0}
+.more:hover{background:#0C2340;color:#fff}
+.totop{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:6;width:52px;height:52px;border:0;background:var(--blue);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(12,35,64,.3);border-bottom:3px solid var(--orange)}
+.totop:hover{background:#13345C}
+/* Footer */
+.foot{background:var(--blue);color:#DCE3EE;margin-top:40px;border-top:4px solid var(--orange)}
+.foot .wrap{padding-block:28px 36px;display:grid;gap:22px}
+.fphones{display:flex;flex-wrap:wrap;gap:8px 28px;font-size:.98rem}
+.fphones b{color:#fff;font-variant-numeric:tabular-nums}
+.fcols{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:22px}
+.fcols h4{margin:0 0 10px;font-family:var(--head);font-weight:800;font-size:.85rem;letter-spacing:.12em;text-transform:uppercase;color:#FFB08F}
+.fcols ul{list-style:none;margin:0;padding:0;display:grid;gap:7px;font-size:.92rem}
+.foot a{color:#fff;text-decoration:none}.foot a:hover{text-decoration:underline}
+.fine{font-size:.8rem;color:#A9B6C8;border-top:1px solid rgba(255,255,255,.15);padding-top:14px}
+
+/* Phone tweaks */
+@media (max-width:720px){
+  .global .phones{display:none}
+  .glinks{display:none}
+  .dept h1{font-size:1.2rem}
+  .call{padding:10px 14px;font-size:.95rem}
+}
+@media (max-width:420px){.kit{grid-template-columns:96px 1fr}.photo{min-height:100px}.dept small{display:none}}
+
+/* Desktop */
+@media (min-width:960px){
+  .dept h1{font-size:1.85rem}
+  .layout{grid-template-columns:360px minmax(0,1fr);gap:36px;align-items:start;padding-block:28px 8px}
+  .panel{position:sticky;top:150px}
+  .panelinfo{display:grid;gap:6px;font-size:.88rem;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+  .panelinfo b{color:var(--fg)}
+  h2:first-child{margin-top:0}
+  .results{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .results .kit{grid-template-columns:1fr;grid-template-rows:150px auto}
+  .results .photo{min-height:150px}
+  .results .skipped{grid-column:1/-1}
+  .dir{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="global"><div class="wrap">
+  <a class="wordmark" href="https://www.utsa.edu/" target="_blank" rel="noopener">UT <span>San Antonio</span></a>
+  <nav class="glinks" aria-label="University links">
+    <a href="https://www.utsa.edu/publicsafety/about/index.html" target="_blank" rel="noopener">Public Safety</a>
+    <a href="https://alerts.utsa.edu/ens/" target="_blank" rel="noopener">UTSA Alerts</a>
+    <a href="https://map.utsa.edu/" target="_blank" rel="noopener">Campus Map</a>
+  </nav>
+  <div class="phones"><span><b>PD Emergency</b> 210-458-4911</span><span><b>Non-emergency</b> 210-458-4242</span></div>
+</div></div>
+
+<header class="site">
+  <div class="wrap">
+    <div class="dept"><small>UTSA Public Safety</small><h1>Bleeding Control Kits</h1></div>
+    <a class="call" href="tel:911">Call 911</a>
+  </div>
+  <nav class="nav" aria-label="Public Safety links"><div class="wrap">
+    <a href="https://www.utsa.edu/publicsafety/police-department/index.html" target="_blank" rel="noopener">Police Department</a>
+    <a href="https://www.utsa.edu/publicsafety/crime-prevention/report-a-crime.html" target="_blank" rel="noopener">Report a Crime</a>
+    <a href="https://alerts.utsa.edu/ens/" target="_blank" rel="noopener">UTSA Alerts</a>
+    <a href="https://www.utsa.edu/publicsafety/crime-prevention/livesafe.html" target="_blank" rel="noopener">SafeZone App</a>
+    <a href="https://map.utsa.edu/" target="_blank" rel="noopener">Campus Map</a>
+  </div></nav>
+</header>
+<div class="proto"><div class="wrap"><b>Unofficial prototype.</b> Not affiliated with or approved by UTSA. Locations are approximate and photos are pending. Not for emergency use yet.</div></div>
+
+<main class="wrap layout">
+  <aside class="panel">
+    <button class="btn" id="nearBtn" type="button">
+      Find nearest kit
+    </button>
+    <div class="or">or</div>
+    <div>
+      <label class="lbl" for="where">I'm in or next to</label>
+      <select id="where"><option value="">Pick a building…</option></select>
+    </div>
+    <p class="status" id="status" role="status"></p>
+    <div class="steps">
+      <h3>While you get the kit</h3>
+      <ol>
+        <li>Call 911 and say exactly where you are.</li>
+        <li>Find where the bleeding is coming from.</li>
+        <li><b>Arm or leg:</b> tourniquet 2 to 3 inches above the wound, not on a joint. Tighten until the bleeding stops.</li>
+        <li><b>Neck, shoulder, groin or torso:</b> pack the wound with gauze and hold firm pressure.</li>
+      </ol>
+    </div>
+    <div class="panelinfo">
+      <span><b id="kitTotal">0</b> kits across <b>6</b> campuses</span>
+      <span>Every kit is mounted with an AED.</span>
+    </div>
+  </aside>
+
+  <div class="content">
+    <section id="nearSec" hidden>
+      <h2 id="nearTitle">Closest kits</h2>
+      <div class="results" id="near"></div>
+    </section>
+
+    <section>
+      <h2>All kit locations</h2>
+      <div class="tabs" id="tabs" role="group" aria-label="Campus"></div>
+      <div class="dirhead">
+        <label class="lbl" for="q">Search building or room</label>
+        <input type="search" id="q" placeholder="e.g. JPL, Student Union, 2.01">
+      </div>
+      <div class="dir" id="dir"></div>
+      <button type="button" class="more" id="more" hidden></button>
+    </section>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="fphones">
+      <span>Emergency: <b>911</b> or <b>210-458-4911</b></span>
+      <span>UTSA PD non-emergency: <b>210-458-4242</b></span>
+    </div>
+    <div class="fcols">
+      <div><h4>Public Safety</h4><ul>
+        <li><a href="https://www.utsa.edu/publicsafety/police-department/index.html" target="_blank" rel="noopener">Police Department</a></li>
+        <li><a href="https://www.utsa.edu/publicsafety/about/index.html" target="_blank" rel="noopener">About Public Safety</a></li>
+        <li><a href="https://www.utsa.edu/publicsafety/crime-prevention/report-a-crime.html" target="_blank" rel="noopener">Report a Crime</a></li>
+        <li><a href="https://alerts.utsa.edu/ens/" target="_blank" rel="noopener">UTSA Alerts</a></li>
+        <li><a href="https://www.utsa.edu/safecampus/" target="_blank" rel="noopener">Safe Campus</a></li>
+        <li><a href="https://catalog.utsa.edu/policies/administrativepoliciesandprocedures/crimeawareness/" target="_blank" rel="noopener">Annual Crime and Fire Safety Report</a></li>
+      </ul></div>
+      <div><h4>Resources</h4><ul>
+        <li><a href="https://map.utsa.edu/" target="_blank" rel="noopener">Campus Map</a></li>
+        <li><a href="https://utsa.libcal.com/hours" target="_blank" rel="noopener">Library Hours</a></li>
+        <li><a href="https://campusrec.utsa.edu/facilities/facility-hours.html" target="_blank" rel="noopener">Rec Center Hours</a></li>
+        <li><a href="https://www.stopthebleed.org/" target="_blank" rel="noopener">Stop the Bleed</a></li>
+      </ul></div>
+      <div><h4>University</h4><ul>
+        <li><a href="https://www.utsa.edu/" target="_blank" rel="noopener">UT San Antonio</a></li>
+        <li><a href="https://www.utsa.edu/policies/" target="_blank" rel="noopener">Policies</a></li>
+        <li><a href="https://utsa.edu/policies/reqlinks.html" target="_blank" rel="noopener">Required Links</a></li>
+        <li><a href="https://www.utsa.edu/ada/contact.html" target="_blank" rel="noopener">Accessibility</a></li>
+      </ul></div>
+    </div>
+    <div class="fine">Kit locations from the UTSA PD AED and Stop the Bleed list. Student-built prototype for review with UTSA PD; not an official UTSA site.</div>
+  </div>
+</footer>
+<button type="button" class="totop" id="totop" aria-label="Back to top" hidden><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 15l7-7 7 7"/></svg></button>
+
+<script>
+console.log("%cBuilt by Andre Aguirre / Project BloodLine, 2026. Learn Stop the Bleed: stopthebleed.org","color:#F15A22;font-weight:bold");
+// [campus, code, nearest room, kit count]
+const RAW=[
+["Downtown","Monterey","Lobby",1],["Downtown","Frio","South elevator, 1st floor",1],["Downtown","Buena Vista","Main elevator, 1st floor",1],["Downtown","Durango","Left center entrance, campus side",1],
+["Main","CRW","1.101.2",1],["Main","RRC","1.206",1],["Main","Tennis Courts","Courts",1],["Main","BB","1.01.20",1],["Main","Flawn SB","2.01.08",1],["Main","JPL","2.01.08",8],["Main","McKinney","2.01.30",1],["Main","BSB-BSL3","BSL3",1],["Main","MB4","4.122",1],["Main","MBT-BSL3","BSL3",1],["Main","GDH","100.2",1],["Main","SEB","2.S1",1],["Main","AET","1.100A",1],["Main","ARTS","2.02.14",1],["Main","BSB","1.03.S1",1],["Main","CDC","1.100A",1],["Main","CHAP","NC 15",1],["Main","FSA","1.218",1],["Main","GSR","1.122",1],["Main","HEB SU","Lobby, right side",1],["Main","NPB","4.E2",1],["Main","SSC","100",1],["Main","SU","1.02.20R",1],["Main","UOB","1.304",1],["Main","Alvarez","C-317",1],["Main","Alvarez","C-111R",1],["Main","Alvarez","C-308",1],["Main","BRG","0.E2",1],["Main","BSE","2.116",1],["Main","Convo","1.04.00",1],["Main","LST","1.102",1],["Main","MB1","0.106-4",1],["Main","MS","2.03",1],["Main","MBT","1.108",1],["Main","BSA","1.11",1],["Main","IAB","2.01.09E",1],["Main","IAB","1.01.06",1],["Main","Laurel","B 11",1],["Main","NPB","1.E2",1],["Main","SFF","105",3],["Main","TB","1.116",1],["Main","Bosque","1.104",1],["Main","EB","1.04.16",1],["Main","CRW","1.101.2K",1],["Main","MS","3.02 corridor",1],["Main","Mesquite","Living Lab hallway",1],["Main","RACE","2.S1",1],
+["Park West","FAB","Breezeway",1],["Park West","FH","1.104",0],["Port SA","C4M","109",1],
+["SP1","SP1","237",1],["SP1","SP1","552",1],["SP1","SP1","650",1],["SP1","SP1","444",1],["SP1","SP1","142",1],["SP1","SP1","313",1],
+["SWC","Santikos","112",1],["SWC","Urschel","1C1",1],["SWC","YMCA (1123)","101",1]];
+
+const NAMES={JPL:"John Peace Library",BB:"Business Building",MS:"Main Building",SU:"Student Union","HEB SU":"H-E-B Student Union","Flawn SB":"Flawn Sciences Building",SEB:"Science & Engineering Building",AET:"Applied Engineering & Technology",BSB:"Biosciences Building","BSB-BSL3":"Biosciences Building, BSL3 suite",BSE:"Biotechnology Sciences & Engineering",EB:"Engineering Building",ARTS:"Arts Building",CRW:"Central Receiving & Warehouse",CDC:"Child Development Center",Convo:"Convocation Center",McKinney:"McKinney Humanities Building",NPB:"North Paseo Building",Alvarez:"Alvarez Hall",CHAP:"Chaparral Village",Laurel:"Laurel Village",Mesquite:"Mesquite Hall","Tennis Courts":"Tennis Center",Bosque:"Bosque Street Building"};
+
+// Approximate placeholder coordinates. Replace with field GPS.
+const C={CRW:[29.5806,-98.6232],RRC:[29.5853,-98.6232],"Tennis Courts":[29.5866,-98.6236],BB:[29.5851,-98.6182],"Flawn SB":[29.5824,-98.6179],JPL:[29.5843,-98.6176],McKinney:[29.5833,-98.6166],"BSB-BSL3":[29.5817,-98.6173],BSB:[29.5817,-98.6172],MB4:[29.5812,-98.6168],"MBT-BSL3":[29.5809,-98.6177],MBT:[29.5809,-98.6176],GDH:[29.5875,-98.6214],SEB:[29.5826,-98.6191],AET:[29.5836,-98.6155],ARTS:[29.5848,-98.6161],CDC:[29.5800,-98.6208],CHAP:[29.5888,-98.6208],FSA:[29.5803,-98.6220],GSR:[29.5868,-98.6196],"HEB SU":[29.5836,-98.6199],NPB:[29.5862,-98.6180],SSC:[29.5845,-98.6205],SU:[29.5839,-98.6192],UOB:[29.5793,-98.6195],Alvarez:[29.5880,-98.6190],BRG:[29.5829,-98.6200],BSE:[29.5813,-98.6187],Convo:[29.5831,-98.6214],LST:[29.5872,-98.6176],MB1:[29.5815,-98.6163],MS:[29.5847,-98.6170],BSA:[29.5797,-98.6227],IAB:[29.5858,-98.6214],Laurel:[29.5893,-98.6221],SFF:[29.5859,-98.6246],TB:[29.5790,-98.6178],Bosque:[29.5822,-98.6210],EB:[29.5820,-98.6196],Mesquite:[29.5884,-98.6232],RACE:[29.5806,-98.6185],Monterey:[29.4228,-98.5011],Frio:[29.4256,-98.5030],"Buena Vista":[29.4238,-98.5016],Durango:[29.4222,-98.5004],FAB:[29.5874,-98.6436],FH:[29.5870,-98.6445],C4M:[29.3862,-98.5745],SP1:[29.4298,-98.4958],Santikos:[29.4610,-98.6300],Urschel:[29.4615,-98.6305],"YMCA (1123)":[29.4605,-98.6312]};
+
+const FLAGS={SFF:"Listed 3 times at room 105, confirm",JPL:"8 kits listed, confirm",FH:"AED only, no kit listed",Bosque:"Listed as Main campus, confirm",RRC:"Building code unconfirmed"};
+
+// Hours are only trusted between validFrom and validTo; outside that the page says "Hours not confirmed".
+const HOURS={
+  JPL:{src:"https://utsa.libcal.com/hours",validFrom:"2026-10-25",validTo:"2026-10-31",
+    week:{sun:[["10:00","24:00"]],mon:[["00:00","24:00"]],tue:[["00:00","24:00"]],wed:[["00:00","24:00"]],thu:[["00:00","24:00"]],fri:[["00:00","21:00"]],sat:[["09:00","21:00"]]}}
+};
+function nowCT(){const p=Object.fromEntries(new Intl.DateTimeFormat("en-US",{timeZone:"America/Chicago",year:"numeric",month:"2-digit",day:"2-digit",weekday:"short",hour:"2-digit",minute:"2-digit",hourCycle:"h23"}).formatToParts(new Date()).map(x=>[x.type,x.value]));
+  return {date:`${p.year}-${p.month}-${p.day}`,day:p.weekday.slice(0,3).toLowerCase(),min:(+p.hour)*60+(+p.minute)};}
+const toMin=s=>{const[h,m]=s.split(":").map(Number);return h*60+m;};
+const to12=s=>{let[h,m]=s.split(":").map(Number);if(h===24)return"midnight";const ap=h<12?"am":"pm";h=h%12||12;return m?`${h}:${String(m).padStart(2,"0")}${ap}`:`${h}${ap}`;};
+function status(code){
+  const h=HOURS[code];if(!h)return{s:"unk",t:"Hours not confirmed"};
+  const n=nowCT();if(n.date<h.validFrom||n.date>h.validTo)return{s:"unk",t:"Hours not confirmed"};
+  const today=h.week[n.day]||[];
+  for(const[o,c] of today){if(n.min>=toMin(o)&&n.min<toMin(c))return{s:"open",t:c==="24:00"&&o==="00:00"?"Open 24 hrs today":`Open until ${to12(c)}`};}
+  const later=today.find(([o])=>toMin(o)>n.min);
+  return{s:"closed",t:later?`Closed, opens ${to12(later[0])}`:"Closed now"};
+}
+
+const KITS=RAW.map((r,i)=>({id:"kit-"+(i+1),campus:r[0],code:r[1],room:r[2],kits:r[3],name:NAMES[r[1]]||"",ll:C[r[1]]}));
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+$("#kitTotal").textContent=KITS.reduce((a,k)=>a+k.kits,0);
+
+function meters(a,b){const R=6371e3,t=x=>x*Math.PI/180,dLa=t(b[0]-a[0]),dLo=t(b[1]-a[1]);
+  const h=Math.sin(dLa/2)**2+Math.cos(t(a[0]))*Math.cos(t(b[0]))*Math.sin(dLo/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
+function fmt(m){if(m<30)return"Right here";const ft=m*3.281;const mins=Math.max(1,Math.round(m/80));
+  return ft<1000?`${Math.round(ft/10)*10} ft · ${mins} min`:`${(m/1609).toFixed(1)} mi · ${mins} min`;}
+
+function card(k,d){
+  const roomTxt=/^[0-9A-Z]/.test(k.room)&&!/\s[a-z]/.test(k.room)?`Near room <b>${esc(k.room)}</b>`:esc(k.room);
+  const st=status(k.code);
+  const chips=[`<span class="badge ${st.s}">${esc(st.t)}</span>`,`<span class="chip">AED here</span>`];
+  if(k.kits>1)chips.push(`<span class="chip">${k.kits} kits</span>`);
+  if(FLAGS[k.code])chips.push(`<span class="chip flag">${esc(FLAGS[k.code])}</span>`);
+  const url=`https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${k.ll[0]},${k.ll[1]}`;
+  return `<article class="kit" id="${k.id}">
+    <div class="photo">Photo<br>pending</div>
+    <div class="info">
+      <div class="top"><div class="bldg">${esc(k.code)}</div>${d!=null?`<div class="dist">${fmt(d)}</div>`:""}</div>
+      ${k.name?`<div class="full">${esc(k.name)}</div>`:""}
+      <div class="room">${roomTxt}</div>
+      <div class="chips">${chips.join("")}</div>
+      <a class="go" href="${url}" target="_blank" rel="noopener">Directions</a>
+    </div></article>`;
+}
+
+function showNearest(from,label){
+  const all=KITS.filter(k=>k.kits>0).map(k=>({k,d:meters(from,k.ll)})).sort((a,b)=>a.d-b.d);
+  const list=[];let skipped=0;
+  for(const x of all){if(list.length===3)break;if(status(x.k.code).s==="closed"){skipped++;continue;}list.push(x);}
+  $("#near").innerHTML=list.map(x=>card(x.k,x.d)).join("")+
+    (skipped?`<p class="skipped">Skipped ${skipped} closer kit${skipped>1?"s":""} in a building that's closed right now.</p>`:"");
+  $("#nearTitle").textContent=label;
+  $("#nearSec").hidden=false;
+  $("#nearSec").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+$("#nearBtn").addEventListener("click",()=>{
+  const st=$("#status");
+  if(!navigator.geolocation){st.textContent="Location isn't available here. Pick your building instead.";return;}
+  st.textContent="Getting your location…";
+  navigator.geolocation.getCurrentPosition(
+    p=>{st.textContent="";showNearest([p.coords.latitude,p.coords.longitude],"Closest kits to you");},
+    ()=>{st.textContent="Location is blocked. Pick the building you're in instead.";$("#where").focus();},
+    {enableHighAccuracy:true,timeout:8000,maximumAge:30000});
+});
+
+const ORDER=["Main","Downtown","SP1","Park West","SWC","Port SA"];
+const bldgs=[...new Map(KITS.map(k=>[k.code,k])).values()].sort((a,b)=>ORDER.indexOf(a.campus)-ORDER.indexOf(b.campus)||a.code.localeCompare(b.code));
+let lastCampus="";const sel=$("#where");let grp;
+bldgs.forEach(k=>{if(k.campus!==lastCampus){grp=document.createElement("optgroup");grp.label=k.campus;sel.appendChild(grp);lastCampus=k.campus;}
+  const o=document.createElement("option");o.value=k.code;o.textContent=k.name?`${k.code} · ${k.name}`:k.code;grp.appendChild(o);});
+sel.addEventListener("change",()=>{const k=KITS.find(x=>x.code===sel.value);if(k)showNearest(k.ll,`Closest kits to ${k.code}`);});
+
+const CAMPUSES=["Main","Downtown","SP1","Park West","SWC","Port SA"];
+let campus="Main";
+$("#tabs").innerHTML=CAMPUSES.map(c=>`<button type="button" class="tab" data-c="${c}" aria-pressed="${c===campus}">${c}<span class="n">${KITS.filter(k=>k.campus===c).length}</span></button>`).join("");
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;campus=b.dataset.c;expanded=false;
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-pressed",t===b));renderDir();});
+$("#q").addEventListener("input",renderDir);
+
+const LIMIT=12;let expanded=false;
+function renderDir(){
+  const q=$("#q").value.trim().toLowerCase();
+  const rows=KITS.filter(k=>q?(k.code+" "+k.name+" "+k.room+" "+k.campus).toLowerCase().includes(q):k.campus===campus)
+    .sort((a,b)=>a.code.localeCompare(b.code));
+  const cut=!q&&!expanded&&rows.length>LIMIT;
+  const shown=cut?rows.slice(0,LIMIT):rows;
+  $("#dir").innerHTML=shown.length?shown.map(k=>card(k,null)).join(""):`<p class="status">No kits match "${esc(q)}".</p>`;
+  const m=$("#more");m.hidden=!cut;if(cut)m.textContent=`Show all ${rows.length} ${campus} kits`;
+}
+$("#more").addEventListener("click",()=>{expanded=true;renderDir();});
+renderDir();
+
+function openHash(){const id=location.hash.slice(1);if(!/^kit-\d+$/.test(id))return;
+  const k=KITS.find(x=>x.id===id);if(!k)return;$("#q").value="";campus=k.campus;expanded=true;
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-pressed",t.dataset.c===campus));renderDir();
+  const el=document.getElementById(id);if(el){el.classList.add("hl");el.scrollIntoView({block:"center"});}}
+window.addEventListener("hashchange",openHash);openHash();
+const tt=$("#totop");
+window.addEventListener("scroll",()=>{tt.hidden=window.scrollY<900;},{passive:true});
+tt.addEventListener("click",()=>{const r=matchMedia("(prefers-reduced-motion: reduce)").matches;window.scrollTo({top:0,behavior:r?"auto":"smooth"});});
+</script>
+
+</body>
+<!--
+  Built by Andre Aguirre, founder of Project BloodLine, October 2026.
+  Started as a student project because a kit only helps if you can find it.
+  If you're reading this, you're probably from IT. Hi. Please keep this comment.
+  Go learn Stop the Bleed: https://www.stopthebleed.org
+-->
+</html>
