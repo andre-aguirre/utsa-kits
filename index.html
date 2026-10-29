@@ -220,7 +220,7 @@ h2::before{content:"";width:6px;height:1.1em;background:var(--orange);flex:none}
     </div>
     <div class="panelinfo">
       <span><b id="kitTotal">0</b> kits across <b id="campusTotal">6</b> campuses</span>
-      <span>Every kit is mounted with an AED.</span>
+      <span>Kits are kept inside the AED cabinets.</span>
     </div>
   </aside>
 
@@ -286,12 +286,12 @@ const RAW=[
 ["SP1","SP1","237",1],["SP1","SP1","552",1],["SP1","SP1","650",1],["SP1","SP1","444",1],["SP1","SP1","142",1],["SP1","SP1","313",1],
 ["SWC","Santikos","112",1],["SWC","Urschel","1C1",1],["SWC","YMCA (1123)","101",1]];
 
-const NAMES={JPL:"John Peace Library",BB:"Business Building",MS:"Main Building",SU:"Student Union","HEB SU":"H-E-B Student Union","Flawn SB":"Flawn Sciences Building",SEB:"Science & Engineering Building",AET:"Applied Engineering & Technology",BSB:"Biosciences Building","BSB-BSL3":"Biosciences Building, BSL3 suite",BSE:"Biotechnology Sciences & Engineering",EB:"Engineering Building",ARTS:"Arts Building",CRW:"Central Receiving & Warehouse",CDC:"Child Development Center",Convo:"Convocation Center",McKinney:"McKinney Humanities Building",NPB:"North Paseo Building",Alvarez:"Alvarez Hall",CHAP:"Chaparral Village",Laurel:"Laurel Village",Mesquite:"Mesquite Hall","Tennis Courts":"Tennis Center",Bosque:"Bosque Street Building"};
+const NAMES={JPL:"John Peace Library",BB:"Business Building",MS:"Main Building",SU:"Student Union","HEB SU":"H-E-B Student Union","Flawn SB":"Flawn Sciences Building",SEB:"Science & Engineering Building",AET:"Applied Engineering & Technology",BSB:"Biosciences Building","BSB-BSL3":"Biosciences Building, BSL3 suite",BSE:"Biotechnology Sciences & Engineering",EB:"Engineering Building",ARTS:"Arts Building",CRW:"Central Receiving & Warehouse",CDC:"Child Development Center",Convo:"Convocation Center",McKinney:"McKinney Humanities Building",NPB:"North Paseo Building",Alvarez:"Alvarez Hall",CHAP:"Chaparral Village",Laurel:"Laurel Village",Mesquite:"Mesquite Hall","Tennis Courts":"Tennis Center"};
 
 // Approximate placeholder coordinates. Replace with field GPS.
 const C={CRW:[29.5806,-98.6232],RRC:[29.5853,-98.6232],"Tennis Courts":[29.5866,-98.6236],BB:[29.5851,-98.6182],"Flawn SB":[29.5824,-98.6179],JPL:[29.5843,-98.6176],McKinney:[29.5833,-98.6166],"BSB-BSL3":[29.5817,-98.6173],BSB:[29.5817,-98.6172],MB4:[29.5812,-98.6168],"MBT-BSL3":[29.5809,-98.6177],MBT:[29.5809,-98.6176],GDH:[29.5875,-98.6214],SEB:[29.5826,-98.6191],AET:[29.5836,-98.6155],ARTS:[29.5848,-98.6161],CDC:[29.5800,-98.6208],CHAP:[29.5888,-98.6208],FSA:[29.5803,-98.6220],GSR:[29.5868,-98.6196],"HEB SU":[29.5836,-98.6199],NPB:[29.5862,-98.6180],SSC:[29.5845,-98.6205],SU:[29.5839,-98.6192],UOB:[29.5793,-98.6195],Alvarez:[29.5880,-98.6190],BRG:[29.5829,-98.6200],BSE:[29.5813,-98.6187],Convo:[29.5831,-98.6214],LST:[29.5872,-98.6176],MB1:[29.5815,-98.6163],MS:[29.5847,-98.6170],BSA:[29.5797,-98.6227],IAB:[29.5858,-98.6214],Laurel:[29.5893,-98.6221],SFF:[29.5859,-98.6246],TB:[29.5790,-98.6178],Bosque:[29.5822,-98.6210],EB:[29.5820,-98.6196],Mesquite:[29.5884,-98.6232],RACE:[29.5806,-98.6185],Monterey:[29.4228,-98.5011],Frio:[29.4256,-98.5030],"Buena Vista":[29.4238,-98.5016],Durango:[29.4222,-98.5004],FAB:[29.5874,-98.6436],FH:[29.5870,-98.6445],C4M:[29.3862,-98.5745],SP1:[29.4298,-98.4958],Santikos:[29.4610,-98.6300],Urschel:[29.4615,-98.6305],"YMCA (1123)":[29.4605,-98.6312]};
 
-const FLAGS={SFF:"Listed 3 times at room 105, confirm",JPL:"8 kits listed, confirm",FH:"AED only, no kit listed",Bosque:"Listed as Main campus, confirm",RRC:"Building code unconfirmed"};
+const FLAGS={JPL:"Larger kit, own case",FH:"Kit pending"};
 
 // Hours are only trusted between validFrom and validTo; outside that the page says "Hours not confirmed".
 const HOURS={
@@ -327,7 +327,7 @@ function card(k,d){
   const st=status(k.code);
   const chips=[`<span class="badge ${st.s}">${esc(st.t)}</span>`,`<span class="chip">AED here</span>`];
   if(k.kits>1)chips.push(`<span class="chip">${k.kits} kits</span>`);
-  if(FLAGS[k.code])chips.push(`<span class="chip flag">${esc(FLAGS[k.code])}</span>`);
+  if(FLAGS[k.code])chips.push(`<span class="chip">${esc(FLAGS[k.code])}</span>`);
   const url=`https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${k.ll[0]},${k.ll[1]}`;
   return `<article class="kit" data-id="${k.id}" tabindex="0" role="button" aria-label="${esc(k.code)} kit details">
     <div class="photo">Photo<br>pending</div>
@@ -394,6 +394,9 @@ $("#more").addEventListener("click",()=>{expanded=true;renderDir();});
 renderDir();
 
 const pend='<span class="pending">Not surveyed yet</span>';
+// Per UTSA PD: kits sit inside the AED cabinet, in a red zippered pouch or vacuum-sealed pack, except these.
+const MOUNT={JPL:"Larger kit in its own case next to the AED cabinet",UOB:"No cabinet. Kit is next to or on top of the AED",FH:"Kit pending. It doesn't fit in the AED cabinet"};
+const CONTENTS="Tourniquet (C-A-T), 6 in. trauma dressing, 2 compressed gauze, 2 pairs of gloves, trauma shears, marker, survival blanket, instructions";
 // UTSA room numbers start with the floor: 1.01.20 = 1st floor, 0.E2 = floor 0
 const FLOORS=["Floor 0 (lower level)","First floor","Second floor","Third floor","Fourth floor","Fifth floor","Sixth floor","Seventh floor","Eighth floor","Ninth floor"];
 function floorOf(room){const m=/^(\d)\.\S/.exec(room);return m?FLOORS[+m[1]]:null;}
@@ -414,15 +417,16 @@ function detail(k){
         <div class="shot"><div class="photo">Photo<br>pending</div><span>From the entrance</span></div>
         <div class="shot"><div class="photo">Photo<br>pending</div><span>The cabinet</span></div>
       </div>
-      <div class="chips"><span class="badge ${st.s}">${esc(st.t)}</span><span class="chip">AED here</span>${k.kits>1?`<span class="chip">${k.kits} kits</span>`:""}${FLAGS[k.code]?`<span class="chip flag">${esc(FLAGS[k.code])}</span>`:""}</div>
+      <div class="chips"><span class="badge ${st.s}">${esc(st.t)}</span><span class="chip">AED here</span>${k.kits>1?`<span class="chip">${k.kits} kits</span>`:""}${FLAGS[k.code]?`<span class="chip">${esc(FLAGS[k.code])}</span>`:""}</div>
       <dl class="facts">
         <dt>Building</dt><dd>${esc(k.code)}${k.name?` · ${esc(k.name)}`:""}</dd>
         <dt>Location</dt><dd>${roomTxt}</dd>
+        <dt>Where to look</dt><dd>${MOUNT[k.code]?esc(MOUNT[k.code]):"Inside the AED cabinet, in a red zippered pouch or vacuum-sealed pack"}</dd>
         <dt>Floor</dt><dd>${floorOf(k.room)||pend}</dd>
         <dt>Entrance</dt><dd>${pend}</dd>
         <dt>Directions</dt><dd>${pend}</dd>
         <dt>Hours</dt><dd>${h&&st.s!=="unk"?`${esc(st.t)} <a href="${h.src}" target="_blank" rel="noopener">See full hours</a>`:'<span class="pending">Not confirmed</span>'}</dd>
-        <dt>In the kit</dt><dd>${pend}</dd>
+        <dt>In the kit</dt><dd>${MOUNT[k.code]?pend:CONTENTS+' <span class="pending">(typical basic kit)</span>'}</dd>
       </dl>
       <div class="sheet-actions"><a class="btn" href="${url}" target="_blank" rel="noopener" style="text-decoration:none">Walking directions</a></div>
       <div><label class="lbl" for="kitLink">Link to this kit</label>
