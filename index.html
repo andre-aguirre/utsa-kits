@@ -82,6 +82,9 @@ h2::before{content:"";width:6px;height:1.1em;background:var(--orange);flex:none}
 
 /* Kit card */
 .kit{background:var(--surface);border:1px solid var(--line);overflow:hidden;display:grid;grid-template-columns:116px 1fr;scroll-margin-top:140px}
+.kit{cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.kit:hover{border-color:var(--fg);box-shadow:0 4px 14px rgba(12,35,64,.12)}
+.kit .more-hint{font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .kit.hl{outline:3px solid var(--orange);outline-offset:-3px}
 .photo{background:repeating-linear-gradient(135deg,var(--stripe) 0 8px,transparent 8px 16px),var(--chip);display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:8px;min-height:116px}
 .info{padding:12px 14px;display:grid;gap:6px;min-width:0;align-content:start}
@@ -110,6 +113,28 @@ h2::before{content:"";width:6px;height:1.1em;background:var(--orange);flex:none}
 .more:hover{background:#0C2340;color:#fff}
 .totop{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:6;width:52px;height:52px;border:0;background:var(--blue);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(12,35,64,.3);border-bottom:3px solid var(--orange)}
 .totop:hover{background:#13345C}
+.sheet-bg{position:fixed;inset:0;z-index:20;background:rgba(7,20,37,.6);display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);color:var(--text);width:100%;max-width:760px;max-height:92vh;overflow:auto;border-top:4px solid var(--orange);padding:0 0 calc(20px + env(safe-area-inset-bottom,0px))}
+.sheet-head{position:sticky;top:0;background:var(--surface);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);z-index:1}
+.sheet-head small{display:block;font-weight:700;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.sheet-head h3{margin:2px 0 0;font-family:var(--head);font-weight:800;font-stretch:condensed;font-size:1.6rem;line-height:1.1;color:var(--fg)}
+.x{appearance:none;flex:none;width:44px;height:44px;border:2px solid var(--fg);background:var(--surface);color:var(--fg);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.sheet-body{display:grid;gap:18px;padding:16px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.shot{display:grid;gap:6px}
+.shot .photo{min-height:0;aspect-ratio:4/3;max-width:100%}
+.shot span{font-size:.78rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;margin:0}
+.facts dt{font-weight:700;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.facts dd{margin:0;min-width:0}
+.facts .pending{color:var(--muted);font-style:italic}
+.sheet-actions{display:flex;flex-wrap:wrap;gap:10px}
+.sheet-actions .btn{width:auto;flex:1 1 200px;min-height:52px;font-size:1.05rem}
+.linkrow{display:flex;gap:8px;align-items:stretch}
+.linkrow input{flex:1;min-width:0;font:inherit;font-size:.88rem;padding:10px 12px;border:2px solid var(--line);background:var(--bg);color:var(--text);border-radius:0}
+.copy{appearance:none;cursor:pointer;flex:none;background:#fff;color:#0C2340;border:2px solid #0C2340;font-weight:800;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;padding:0 16px;border-radius:0}
+.copy:hover{background:#0C2340;color:#fff}
+@media (min-width:760px){.sheet-bg{align-items:center;padding:24px}.sheet{max-height:88vh}}
 /* Footer */
 .foot{background:var(--blue);color:#DCE3EE;margin-top:40px;border-top:4px solid var(--orange)}
 .foot .wrap{padding-block:28px 36px;display:grid;gap:22px}
@@ -148,8 +173,6 @@ h2::before{content:"";width:6px;height:1.1em;background:var(--orange);flex:none}
 </style>
 </head>
 <body>
-
-
 <div class="global"><div class="wrap">
   <a class="wordmark" href="https://www.utsa.edu/" target="_blank" rel="noopener">UT <span>San Antonio</span></a>
   <nav class="glinks" aria-label="University links">
@@ -196,7 +219,7 @@ h2::before{content:"";width:6px;height:1.1em;background:var(--orange);flex:none}
       </ol>
     </div>
     <div class="panelinfo">
-      <span><b id="kitTotal">0</b> kits across <b>6</b> campuses</span>
+      <span><b id="kitTotal">0</b> kits across <b id="campusTotal">6</b> campuses</span>
       <span>Every kit is mounted with an AED.</span>
     </div>
   </aside>
@@ -292,6 +315,7 @@ const KITS=RAW.map((r,i)=>({id:"kit-"+(i+1),campus:r[0],code:r[1],room:r[2],kits
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 $("#kitTotal").textContent=KITS.reduce((a,k)=>a+k.kits,0);
+$("#campusTotal").textContent=new Set(KITS.map(k=>k.campus)).size;
 
 function meters(a,b){const R=6371e3,t=x=>x*Math.PI/180,dLa=t(b[0]-a[0]),dLo=t(b[1]-a[1]);
   const h=Math.sin(dLa/2)**2+Math.cos(t(a[0]))*Math.cos(t(b[0]))*Math.sin(dLo/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
@@ -305,7 +329,7 @@ function card(k,d){
   if(k.kits>1)chips.push(`<span class="chip">${k.kits} kits</span>`);
   if(FLAGS[k.code])chips.push(`<span class="chip flag">${esc(FLAGS[k.code])}</span>`);
   const url=`https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${k.ll[0]},${k.ll[1]}`;
-  return `<article class="kit" id="${k.id}">
+  return `<article class="kit" data-id="${k.id}" tabindex="0" role="button" aria-label="${esc(k.code)} kit details">
     <div class="photo">Photo<br>pending</div>
     <div class="info">
       <div class="top"><div class="bldg">${esc(k.code)}</div>${d!=null?`<div class="dist">${fmt(d)}</div>`:""}</div>
@@ -313,6 +337,7 @@ function card(k,d){
       <div class="room">${roomTxt}</div>
       <div class="chips">${chips.join("")}</div>
       <a class="go" href="${url}" target="_blank" rel="noopener">Directions</a>
+      <span class="more-hint">Tap for photos and details</span>
     </div></article>`;
 }
 
@@ -324,7 +349,11 @@ function showNearest(from,label){
     (skipped?`<p class="skipped">Skipped ${skipped} closer kit${skipped>1?"s":""} in a building that's closed right now.</p>`:"");
   $("#nearTitle").textContent=label;
   $("#nearSec").hidden=false;
-  $("#nearSec").scrollIntoView({behavior:"smooth",block:"start"});
+  const sec=$("#nearSec");
+  if(matchMedia("(min-width:960px)").matches){
+    const headH=document.querySelector(".site").getBoundingClientRect().bottom;
+    if(sec.getBoundingClientRect().top<headH)window.scrollTo({top:0,behavior:"smooth"});
+  }else sec.scrollIntoView({behavior:"smooth",block:"start"});
 }
 
 $("#nearBtn").addEventListener("click",()=>{
@@ -364,16 +393,66 @@ function renderDir(){
 $("#more").addEventListener("click",()=>{expanded=true;renderDir();});
 renderDir();
 
+const pend='<span class="pending">Not surveyed yet</span>';
+let lastFocus=null;
+function detail(k){
+  const st=status(k.code);
+  const url=`https://www.google.com/maps/dir/?api=1&travelmode=walking&destination=${k.ll[0]},${k.ll[1]}`;
+  const link=location.href.split("#")[0]+"#"+k.id;
+  const roomTxt=/^[0-9A-Z]/.test(k.room)&&!/\s[a-z]/.test(k.room)?`Near room ${esc(k.room)}`:esc(k.room);
+  const h=HOURS[k.code];
+  closeDetail(false);
+  const bg=document.createElement("div");bg.className="sheet-bg";bg.id="sheetBg";
+  bg.innerHTML=`<div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="sheet-head"><div><small>${esc(k.campus)} campus</small><h3 id="sheetTitle">${esc(k.name||k.code)}</h3></div>
+      <button type="button" class="x" id="sheetX" aria-label="Close"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="sheet-body">
+      <div class="shots">
+        <div class="shot"><div class="photo">Photo<br>pending</div><span>From the entrance</span></div>
+        <div class="shot"><div class="photo">Photo<br>pending</div><span>The cabinet</span></div>
+      </div>
+      <div class="chips"><span class="badge ${st.s}">${esc(st.t)}</span><span class="chip">AED here</span>${k.kits>1?`<span class="chip">${k.kits} kits</span>`:""}${FLAGS[k.code]?`<span class="chip flag">${esc(FLAGS[k.code])}</span>`:""}</div>
+      <dl class="facts">
+        <dt>Building</dt><dd>${esc(k.code)}${k.name?` · ${esc(k.name)}`:""}</dd>
+        <dt>Location</dt><dd>${roomTxt}</dd>
+        <dt>Floor</dt><dd>${pend}</dd>
+        <dt>Entrance</dt><dd>${pend}</dd>
+        <dt>Directions</dt><dd>${pend}</dd>
+        <dt>Hours</dt><dd>${h&&st.s!=="unk"?`${esc(st.t)} <a href="${h.src}" target="_blank" rel="noopener">See full hours</a>`:'<span class="pending">Not confirmed</span>'}</dd>
+        <dt>In the kit</dt><dd>${pend}</dd>
+      </dl>
+      <div class="sheet-actions"><a class="btn" href="${url}" target="_blank" rel="noopener" style="text-decoration:none">Walking directions</a></div>
+      <div><label class="lbl" for="kitLink">Link to this kit</label>
+        <div class="linkrow"><input id="kitLink" readonly value="${esc(link)}"><button type="button" class="copy" id="copyLink">Copy</button></div></div>
+    </div></div>`;
+  document.body.appendChild(bg);document.body.style.overflow="hidden";
+  lastFocus=document.activeElement;$("#sheetX").focus();
+  bg.addEventListener("click",e=>{if(e.target===bg)closeDetail(true);});
+  $("#sheetX").addEventListener("click",()=>closeDetail(true));
+  $("#copyLink").addEventListener("click",()=>{const inp=$("#kitLink"),b=$("#copyLink");
+    const ok=()=>{b.textContent="Copied";setTimeout(()=>b.textContent="Copy",1600);};
+    try{navigator.clipboard.writeText(inp.value).then(ok,()=>{inp.select();});}catch(e){inp.select();}});
+  if(location.hash!=="#"+k.id){try{history.replaceState(null,"","#"+k.id);}catch(e){}}
+}
+function closeDetail(clearHash){
+  const bg=$("#sheetBg");if(!bg)return;bg.remove();document.body.style.overflow="";
+  if(clearHash){try{history.replaceState(null,"",location.href.split("#")[0]);}catch(e){}}
+  if(lastFocus&&lastFocus.focus)lastFocus.focus();
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDetail(true);});
+document.addEventListener("click",e=>{
+  const c=e.target.closest(".kit");if(!c||e.target.closest("a"))return;
+  const k=KITS.find(x=>x.id===c.dataset.id);if(k)detail(k);});
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Enter"&&e.key!==" ")return;const c=e.target.closest&&e.target.closest(".kit");
+  if(!c||e.target!==c)return;e.preventDefault();const k=KITS.find(x=>x.id===c.dataset.id);if(k)detail(k);});
 function openHash(){const id=location.hash.slice(1);if(!/^kit-\d+$/.test(id))return;
-  const k=KITS.find(x=>x.id===id);if(!k)return;$("#q").value="";campus=k.campus;expanded=true;
-  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-pressed",t.dataset.c===campus));renderDir();
-  const el=document.getElementById(id);if(el){el.classList.add("hl");el.scrollIntoView({block:"center"});}}
+  const k=KITS.find(x=>x.id===id);if(k)detail(k);}
 window.addEventListener("hashchange",openHash);openHash();
 const tt=$("#totop");
 window.addEventListener("scroll",()=>{tt.hidden=window.scrollY<900;},{passive:true});
 tt.addEventListener("click",()=>{const r=matchMedia("(prefers-reduced-motion: reduce)").matches;window.scrollTo({top:0,behavior:r?"auto":"smooth"});});
 </script>
-
 </body>
 <!--
   Built by Andre Aguirre, founder of Project BloodLine, October 2026.
